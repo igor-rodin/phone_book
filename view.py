@@ -27,16 +27,21 @@ def info():
     print('Коллективом из 4-х человек')
 
 
-def print_line(sym='-', counts=70):
-    print(sym * counts)
+def print_line(sym='-', counts=70, clr_sym=const.CYAN_CLR_SYM):
+    print("{}{}{}".format(
+        clr_sym[0], sym * counts, clr_sym[1]))
+
+
+def print_clr_text(clr_sym: list, text):
+    print("{} {} {}".format(clr_sym[0], text, clr_sym[1]))
 
 
 def show_title():
     print_line('=')
-    print("\t\tТелефонная книга")
+    print_clr_text(const.GREEN_CLR_SYM, "\t\tТелефонная книга")
     print_line()
-    print("{:5}{:15}{:10}{:12}{:20}".format(
-        '#', 'Фамилия', 'Имя', 'Номер', 'Описание'))
+    print("{} {:5}{:15}{:10}{:12}{:20} {}".format(const.GREEN_CLR_SYM[0],
+                                                  '#', 'Фамилия', 'Имя', 'Номер', 'Описание', const.GREEN_CLR_SYM[1]))
     print_line()
 
 
@@ -120,7 +125,7 @@ def run_app():  # Главный цикл
             info()
         elif inp.lower() == "/exit" or inp.lower() == "/quit":
             c.save_phone_book(c.phone_book())
-            print('Выход из программы.')
+            print_clr_text(const.YELLOW_CLR_SYM, 'Выход из программы.')
             break
         elif inp.lower() == "/add":
             record_data = get_record_data()
@@ -131,17 +136,18 @@ def run_app():  # Главный цикл
                 print("Укажите номер записи для редактирования")
             else:
                 if rec_id not in range(len(c.phone_book())):
-                    print("Такой записи нет")
+                    print_clr_text(const.RED_CLR_SYM, "Такой записи нет")
                 else:
                     edit_data = get_edit_data(rec_id)
                     c.change_record(rec_id, edit_data)
         elif inp.lower().startswith("/del"):
             rec_id = get_edit_id(inp.lower())
             if rec_id == -1:
-                print("Укажите номер записи для удаления")
+                print_clr_text(const.YELLOW_CLR_SYM,
+                               "Укажите номер записи для удаления")
             else:
                 if rec_id not in range(len(c.phone_book())):
-                    print("Такой записи нет")
+                    print_clr_text(const.RED_CLR_SYM, "Такой записи нет")
                 else:
                     c.delete_record(rec_id)
         elif inp.lower().startswith("/export"):
@@ -152,11 +158,11 @@ def run_app():  # Главный цикл
                 card_format = const.CardFormat(format)
                 export_file = st.EXPORT_FILE + '.' + card_format.name.lower()
                 c.export_phone_book(export_file, card_format)
-                print(
-                    f'Книга экспортирована в формате {card_format} в файл {export_file}')
+                msg = 'Книга экспортирована в файл {}'.format(export_file)
+                print_clr_text(const.YELLOW_CLR_SYM, msg)
             else:
                 if rec_id not in range(len(c.phone_book())):
-                    print("Такой записи нет")
+                    print_clr_text(const.RED_CLR_SYM, "Такой записи нет")
                 else:
                     format = int(get_input(
                         "В каком формате сохранить? (1 - 'JSON', 2 - 'CSV'): "))
@@ -165,10 +171,11 @@ def run_app():  # Главный цикл
                         c.get_record_data(rec_id)[
                             0] + '.' + card_format.name.lower()
                     c.export_record(export_file, rec_id, card_format)
-                    print(
-                        f'Запись # {rec_id} экспортирована в формате {card_format} в файл {export_file}')
+                    msg = 'Запись экспортирована в файл {}'.format(export_file)
+                    print_clr_text(const.YELLOW_CLR_SYM, msg)
         elif inp.lower() == "/import":
             import_file = get_input("Укажите файл для импорта", required=True)
             c.import_records(import_file)
         else:
-            print('Неверная команда. Для помощи наберите /help')
+            print_clr_text(const.RED_CLR_SYM,
+                           'Неверная команда. Для помощи наберите /help')

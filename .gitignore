@@ -5,4 +5,4 @@ __pycache__
 .idea
 *.json
 *.csv
-*.db
+phone_book.db

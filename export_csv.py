@@ -25,4 +25,4 @@ def import_records(file_name):
         file_reader = csv.reader(f, delimiter=",")
         next(file_reader)
         for row in file_reader:
-            phb.add_record(phi.create_record(row[0], row[1], row[2], row[3]))
+            phb.add_record(phi.create_record(* row))

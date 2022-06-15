@@ -27,7 +27,8 @@ def export_phone_book(file_name: str, format: const.CardFormat):
     elif format == const.CardFormat.CSV:
         exp_csv.export(file_name, phone_book())
     else:
-        print("Неизвестный формат")
+        print("{} {} {}".format(
+            const.RED_CLR_SYM[0], "Неизвестный формат", const.RED_CLR_SYM[1]))
 
 
 def export_record(file_name: str, id: int, format: const.CardFormat):
@@ -36,21 +37,26 @@ def export_record(file_name: str, id: int, format: const.CardFormat):
     elif format == const.CardFormat.CSV:
         exp_csv.export_record(file_name, phb.get_record(id))
     else:
-        print("Неизвестный формат")
+        print("{} {} {}".format(
+            const.RED_CLR_SYM[0], "Неизвестный формат", const.RED_CLR_SYM[1]))
 
 
 def import_records(file_name: str):
     ext = path.splitext(file_name)[1]
     if ext == '.json':
-        format = const.CardFormat.JSON
         exp_json.import_records(file_name)
-        print('Записи импортированы в формате {}'.format(format))
+        msg = 'Записи импортированы в формате {}'.format(ext.lstrip('.'))
+        print(print("{} {} {}".format(
+            const.YELLOW_CLR_SYM[0], msg, const.YELLOW_CLR_SYM)))
     elif ext == '.csv':
-        format = const.CardFormat.CSV
         exp_csv.import_records(file_name)
-        print('Записи импортированы в формате {}'.format(format))
+        msg = 'Записи импортированы в формате {}'.format(ext.lstrip('.'))
+        print("{} {} {}".format(
+            const.YELLOW_CLR_SYM[0], msg, const.YELLOW_CLR_SYM[1]))
     else:
-        print("неизвестный формат - {}".format(ext).lstrip('.'))
+        msg = "неизвестный формат - {}".format(ext).lstrip('.')
+        print("{} {} {}".format(
+            const.RED_CLR_SYM[0], msg, const.RED_CLR_SYM[1]))
 
 
 def create_record(record_data: list):
