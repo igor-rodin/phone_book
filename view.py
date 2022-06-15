@@ -1,5 +1,4 @@
 # Основная логика программы
-from nis import match
 import const
 import controller as c
 
@@ -71,7 +70,7 @@ def get_input(message: str, required=False) -> str:
 
 def get_record_data() -> list:
     data = []
-    print("Укажите нужную информацию:")
+    print("Введите данные:")
     first_name = get_input("Имя", required=True)
     data.append(first_name)
 
