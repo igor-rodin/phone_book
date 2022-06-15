@@ -1,13 +1,11 @@
 # Основная логика программы
 import const
+import settings as st
 import controller as c
 
 
 def init():  # Приветствие, и загрузка данных
-    # print('Телефонная книга')
-    # print('/help - вывод помощи')
     c.load_phone_book()
-    # return io_module.load_db()
 
 
 def help():
@@ -152,9 +150,10 @@ def run_app():  # Главный цикл
                 format = int(get_input(
                     "В каком формате сохранить? (1 - 'JSON', 2 - 'CSV'): "))
                 card_format = const.CardFormat(format)
-                file = c.export_phone_book(card_format)
+                export_file = st.EXPORT_FILE + '.' + card_format.name.lower()
+                c.export_phone_book(export_file, card_format)
                 print(
-                    f'Книга экспортирована в формате {card_format} в файл {file}')
+                    f'Книга экспортирована в формате {card_format} в файл {export_file}')
             else:
                 if rec_id not in range(len(c.phone_book())):
                     print("Такой записи нет")
@@ -162,9 +161,12 @@ def run_app():  # Главный цикл
                     format = int(get_input(
                         "В каком формате сохранить? (1 - 'JSON', 2 - 'CSV'): "))
                     card_format = const.CardFormat(format)
-                    file = c.export_record(rec_id, card_format)
+                    export_file = st.EXPORT_FILE + '_' + \
+                        c.get_record_data(rec_id)[
+                            0] + '.' + card_format.name.lower()
+                    c.export_record(export_file, rec_id, card_format)
                     print(
-                        f'Запись # {rec_id} экспортирована в формате {card_format} в файл {file}')
+                        f'Запись # {rec_id} экспортирована в формате {card_format} в файл {export_file}')
         elif inp.lower() == "/import":
             import_file = get_input("Укажите файл для импорта", required=True)
             c.import_records(import_file)

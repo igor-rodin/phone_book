@@ -1,3 +1,4 @@
+from os import path
 import const
 import model.phone_item as phi
 import model.phone_book as phb
@@ -20,44 +21,36 @@ def save_phone_book(data: list):
     bd.save_db(data)
 
 
-def export_phone_book(format: const.CardFormat):
-
+def export_phone_book(file_name: str, format: const.CardFormat):
     if format == const.CardFormat.JSON:
-        exp_file = exp_json.export(phone_book())
+        exp_json.export(file_name, phone_book())
     elif format == const.CardFormat.CSV:
-        exp_file = exp_csv.export(phone_book())
+        exp_csv.export(file_name, phone_book())
     else:
         print("Неизвестный формат")
-    return exp_file
 
 
-def export_record(id: int, format: const.CardFormat):
+def export_record(file_name: str, id: int, format: const.CardFormat):
     if format == const.CardFormat.JSON:
-        exp_file = exp_json.export_record(phb.get_record(id))
+        exp_json.export_record(file_name, phb.get_record(id))
     elif format == const.CardFormat.CSV:
-        exp_file = exp_csv.export_record(phb.get_record(id))
+        exp_csv.export_record(file_name, phb.get_record(id))
     else:
         print("Неизвестный формат")
-    return exp_file
 
 
 def import_records(file_name: str):
-    dot_idx = file_name.find('.')
-    if dot_idx == -1:
-        print("Неизвестный формат")
-        return
-
-    ext = file_name[dot_idx + 1:].lower()
-    if ext == 'json':
+    ext = path.splitext(file_name)[1]
+    if ext == '.json':
         format = const.CardFormat.JSON
         exp_json.import_records(file_name)
         print('Записи импортированы в формате {}'.format(format))
-    elif ext == 'csv':
+    elif ext == '.csv':
         format = const.CardFormat.CSV
         exp_csv.import_records(file_name)
         print('Записи импортированы в формате {}'.format(format))
     else:
-        print("неизвестный формат - {}".format(ext))
+        print("неизвестный формат - {}".format(ext).lstrip('.'))
 
 
 def create_record(record_data: list):
