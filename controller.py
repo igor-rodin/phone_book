@@ -1,4 +1,3 @@
-from os import path
 import const
 import model.phone_item as phi
 import model.phone_book as phb
@@ -43,12 +42,17 @@ def export_record(id: int, format: const.CardFormat):
 
 
 def import_records(file_name: str):
-    ext = path.splitext(file_name)[1]
-    if ext == '.json':
+    dot_idx = file_name.find('.')
+    if dot_idx == -1:
+        print("Неизвестный формат")
+        return
+
+    ext = file_name[dot_idx + 1:].lower()
+    if ext == 'json':
         format = const.CardFormat.JSON
         exp_json.import_records(file_name)
         print('Записи импортированы в формате {}'.format(format))
-    elif ext == '.csv':
+    elif ext == 'csv':
         format = const.CardFormat.CSV
         exp_csv.import_records(file_name)
         print('Записи импортированы в формате {}'.format(format))
